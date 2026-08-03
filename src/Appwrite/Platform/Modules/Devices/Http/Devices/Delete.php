@@ -6,6 +6,7 @@ use Appwrite\Devices\DevicePermissions;
 use Appwrite\Event\Event;
 use Appwrite\Extend\Exception;
 use Appwrite\SDK\AuthType;
+use Appwrite\SDK\ContentType;
 use Appwrite\SDK\Method;
 use Appwrite\SDK\Response as SDKResponse;
 use Appwrite\Utopia\Database\Documents\User;
@@ -44,7 +45,8 @@ class Delete extends Action
                 name: 'deleteDevice',
                 description: '/docs/references/devices/delete-device.md',
                 auth: [AuthType::ADMIN, AuthType::KEY, AuthType::SESSION, AuthType::JWT],
-                responses: [new SDKResponse(code: Response::STATUS_CODE_NO_CONTENT, model: Response::MODEL_NONE)],
+                responses: [new SDKResponse(code: Response::STATUS_CODE_NOCONTENT, model: Response::MODEL_NONE)],
+                contentType: ContentType::NONE,
             ))
             ->param('deviceId', '', new UID(), 'Device ID.')
             ->inject('response')

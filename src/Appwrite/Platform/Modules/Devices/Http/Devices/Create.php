@@ -2,8 +2,8 @@
 
 namespace Appwrite\Platform\Modules\Devices\Http\Devices;
 
-use Appwrite\Devices\DevicePermissions;
 use Appwrite\Devices\DeviceId;
+use Appwrite\Devices\DevicePermissions;
 use Appwrite\Devices\Validator\Serial;
 use Appwrite\Event\Event;
 use Appwrite\Extend\Exception;
