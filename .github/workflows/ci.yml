@@ -253,6 +253,10 @@ jobs:
 
   build:
     name: Build
+    # RunsOn infrastructure and its ECR/S3 caches are available only upstream.
+    # Forks retain the GitHub-hosted checks above and publish release images
+    # through release.yml.
+    if: github.repository == 'appwrite/appwrite'
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+s3-cache+ecr-cache
     steps:
       - name: Checkout repository
