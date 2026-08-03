@@ -22,8 +22,14 @@ class V25 extends Migration
         }
 
         if ($projectInternalId === 'console') {
+            Console::info('Creating device route collection');
+            $this->createCollection('deviceRoutes');
             return;
         }
+
+        Console::info('Creating device collections');
+        $this->createCollection('devices');
+        $this->createCollection('deviceCredentials');
 
         Console::info('Repairing provider trigger attributes');
 

@@ -165,5 +165,38 @@ final class MigrationVersionsTest extends TestCase
         $this->assertContains('providerBranches', $attributes);
         $this->assertContains('providerPaths', $attributes);
         $this->assertTrue($database->getCollection('sites')->isEmpty());
+        $this->assertFalse($database->getCollection('devices')->isEmpty());
+        $this->assertFalse($database->getCollection('deviceCredentials')->isEmpty());
+    }
+
+    public function testV25CreatesDeviceRouteCollectionForConsole(): void
+    {
+        require_once __DIR__ . '/../../../app/init.php';
+
+        $authorization = new Authorization();
+        $database = new Database(new Memory(), new Cache(new None()));
+        $database
+            ->setAuthorization($authorization)
+            ->setDatabase('migrationV25DeviceRoutes')
+            ->setNamespace('migration_device_routes_' . \uniqid());
+        $database->create();
+
+        $migration = new V25();
+        $migration->setProject(
+            new Document(['$id' => 'console', '$sequence' => 'console']),
+            $database,
+            $database,
+            $authorization,
+        );
+
+        \ob_start();
+        try {
+            $migration->execute();
+            $migration->execute();
+        } finally {
+            \ob_end_clean();
+        }
+
+        $this->assertFalse($database->getCollection('deviceRoutes')->isEmpty());
     }
 }
