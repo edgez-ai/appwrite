@@ -291,6 +291,7 @@ jobs:
 
   unit:
     name: Tests / Unit
+    if: github.repository == 'appwrite/appwrite'
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+ecr-cache
     needs: build
     permissions:
@@ -338,6 +339,7 @@ jobs:
 
   e2e_general:
     name: Tests / E2E / General
+    if: github.repository == 'appwrite/appwrite'
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+ecr-cache
     needs: build
     permissions:
@@ -396,6 +398,7 @@ jobs:
 
   e2e_service:
     name: Tests / E2E / ${{ matrix.database }} (${{ matrix.mode }}) / ${{ matrix.service.name }}
+    if: github.repository == 'appwrite/appwrite'
     runs-on: ${{ matrix.service.runner }}
     needs: [build, matrix]
     permissions:
@@ -500,6 +503,7 @@ jobs:
 
   e2e_abuse:
     name: Tests / E2E / Abuse (${{ matrix.mode }})
+    if: github.repository == 'appwrite/appwrite'
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+ecr-cache
     needs: [build, matrix]
     permissions:
@@ -561,6 +565,7 @@ jobs:
 
   e2e_screenshots:
     name: Tests / E2E / Screenshots (${{ matrix.mode }})
+    if: github.repository == 'appwrite/appwrite'
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+ecr-cache
     needs: [build, matrix]
     permissions:
@@ -627,7 +632,7 @@ jobs:
 
   benchmark:
     name: Benchmark
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    if: github.repository == 'appwrite/appwrite' && (github.event_name == 'pull_request' || github.event_name == 'push')
     runs-on: runs-on=${{ github.run_id }}/runner=4cpu-linux-x64/volume=120g/spot=false/extras=otel+ecr-cache
     needs: build
     permissions:
