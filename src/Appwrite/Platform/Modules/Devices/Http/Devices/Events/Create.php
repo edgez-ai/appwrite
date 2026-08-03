@@ -4,6 +4,8 @@ namespace Appwrite\Platform\Modules\Devices\Http\Devices\Events;
 
 use Appwrite\Devices\Mqtt;
 use Appwrite\Event\Event;
+use Appwrite\Event\Message\Func as FunctionMessage;
+use Appwrite\Event\Publisher\Func as FunctionPublisher;
 use Appwrite\Event\Webhook;
 use Appwrite\Extend\Exception;
 use Appwrite\Functions\EventProcessor;
@@ -37,7 +39,9 @@ class Create extends Action
             ->inject('request')
             ->inject('response')
             ->inject('dbForPlatform')
+            ->inject('getProjectDB')
             ->inject('authorization')
+            ->inject('publisherForFunctions')
             ->inject('queueForEvents')
             ->inject('queueForWebhooks')
             ->inject('eventProcessor')
@@ -48,7 +52,9 @@ class Create extends Action
         Request $request,
         Response $response,
         Database $dbForPlatform,
+        callable $getProjectDB,
         Authorization $authorization,
+        FunctionPublisher $publisherForFunctions,
         Event $queueForEvents,
         Webhook $queueForWebhooks,
         EventProcessor $eventProcessor,
@@ -90,6 +96,7 @@ class Create extends Action
             throw new Exception(Exception::PROJECT_NOT_FOUND);
         }
 
+        $dbForProject = $getProjectDB($project);
         $mqttCategory = $eventParts['category'];
         $mqttAction = $eventParts['action'];
         $appwriteEvent = 'devices.[deviceId].mqtt.[mqttCategory].' . $mqttAction;
@@ -101,6 +108,25 @@ class Create extends Action
             ->setPayload($payload);
 
         $generatedEvents = Event::generateEvents($appwriteEvent, $queueForEvents->getParams());
+        $functionQueued = false;
+        $functionEvents = $eventProcessor->getFunctionsEvents($project, $dbForProject);
+        if (!empty($functionEvents)) {
+            foreach ($generatedEvents as $generatedEvent) {
+                if (!isset($functionEvents[$generatedEvent])) {
+                    continue;
+                }
+
+                $publisherForFunctions->enqueue(FunctionMessage::fromEvent(
+                    event: $appwriteEvent,
+                    params: $queueForEvents->getParams(),
+                    project: $project,
+                    payload: $payload,
+                ));
+                $functionQueued = true;
+                break;
+            }
+        }
+
         $webhookQueued = false;
         $webhookEvents = $eventProcessor->getWebhooksEvents($project);
         if (!empty($webhookEvents)) {
@@ -127,6 +153,7 @@ class Create extends Action
             ->json([
                 'accepted' => true,
                 'event' => $event,
+                'functionQueued' => $functionQueued,
                 'webhookQueued' => $webhookQueued,
             ]);
     }
