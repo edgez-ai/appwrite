@@ -95,6 +95,15 @@ final class EventTest extends TestCase
         $this->assertContains('users.*.update', $event);
         $this->assertContains('users.*', $event);
 
+        $event = Event::generateEvents('devices.[deviceId].mqtt.[mqttCategory].publish', [
+            'deviceId' => 'device-123',
+            'mqttCategory' => 'message',
+        ]);
+        $this->assertContains('devices.device-123.mqtt.message.publish', $event);
+        $this->assertContains('devices.*.mqtt.message.publish', $event);
+        $this->assertContains('devices.device-123.mqtt.*.publish', $event);
+        $this->assertContains('devices.*.mqtt.*.publish', $event);
+
         $event = Event::generateEvents('tables.[tableId].rows.[rowId].create', [
             'tableId' => 'chapters',
             'rowId' => 'prolog',

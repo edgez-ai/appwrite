@@ -6,6 +6,7 @@ use Appwrite\Platform\Modules\Devices\Http\Devices\Create as CreateDevice;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Credentials\Create as CreateCredential;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Credentials\Delete as DeleteCredential;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Delete as DeleteDevice;
+use Appwrite\Platform\Modules\Devices\Http\Devices\Events\Create as CreateEvent;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Get as GetDevice;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Sessions\Create as CreateSession;
 use Appwrite\Platform\Modules\Devices\Http\Devices\Update as UpdateDevice;
@@ -23,6 +24,7 @@ class Http extends Service
         $this->addAction(ListDevices::getName(), new ListDevices());
         $this->addAction(UpdateDevice::getName(), new UpdateDevice());
         $this->addAction(DeleteDevice::getName(), new DeleteDevice());
+        $this->addAction(CreateEvent::getName(), new CreateEvent());
         $this->addAction(CreateCredential::getName(), new CreateCredential());
         $this->addAction(DeleteCredential::getName(), new DeleteCredential());
         $this->addAction(CreateSession::getName(), new CreateSession());

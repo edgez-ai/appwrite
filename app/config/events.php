@@ -22,6 +22,53 @@ return [
                 '$description' => 'This event triggers when device credentials are revoked.',
             ],
         ],
+        'mqtt' => [
+            '$description' => 'This event triggers on MQTT activity for a device.',
+            'message' => [
+                '$description' => 'This event triggers on MQTT message lifecycle activity.',
+                'publish' => [
+                    '$description' => 'This event triggers when an MQTT message is published.',
+                ],
+                'delivered' => [
+                    '$description' => 'This event triggers when an MQTT message is delivered.',
+                ],
+                'acked' => [
+                    '$description' => 'This event triggers when an MQTT message is acknowledged.',
+                ],
+                'dropped' => [
+                    '$description' => 'This event triggers when an MQTT message is dropped while routing.',
+                ],
+            ],
+            'delivery' => [
+                'dropped' => [
+                    '$description' => 'This event triggers when an MQTT message is dropped while being delivered.',
+                ],
+            ],
+            'client' => [
+                '$description' => 'This event triggers on MQTT client lifecycle activity.',
+                'connected' => [
+                    '$description' => 'This event triggers when an MQTT client connects.',
+                ],
+                'disconnected' => [
+                    '$description' => 'This event triggers when an MQTT client disconnects.',
+                ],
+                'connack' => [
+                    '$description' => 'This event triggers when EMQX acknowledges an MQTT connection.',
+                ],
+                'check_authz_complete' => [
+                    '$description' => 'This event triggers after an MQTT authorization check completes.',
+                ],
+            ],
+            'session' => [
+                '$description' => 'This event triggers on MQTT session subscription activity.',
+                'subscribed' => [
+                    '$description' => 'This event triggers when an MQTT session subscribes to a topic.',
+                ],
+                'unsubscribed' => [
+                    '$description' => 'This event triggers when an MQTT session unsubscribes from a topic.',
+                ],
+            ],
+        ],
         'create' => [
             '$description' => 'This event triggers when a device is created.',
         ],
