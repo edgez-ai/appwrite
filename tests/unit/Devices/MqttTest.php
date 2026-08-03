@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Devices;
 
 use Appwrite\Devices\Mqtt;
@@ -9,7 +11,7 @@ final class MqttTest extends TestCase
 {
     public function testMessagePublishKeepsEmqxConvention(): void
     {
-        self::assertSame([
+        $this->assertSame([
             'category' => 'message',
             'action' => 'publish',
         ], Mqtt::getAppwriteEventParts('message.publish'));
@@ -17,7 +19,7 @@ final class MqttTest extends TestCase
 
     public function testOtherEmqxEventsKeepTheirNames(): void
     {
-        self::assertSame([
+        $this->assertSame([
             'category' => 'client',
             'action' => 'connected',
         ], Mqtt::getAppwriteEventParts('client.connected'));
@@ -25,6 +27,6 @@ final class MqttTest extends TestCase
 
     public function testUnknownEventIsRejected(): void
     {
-        self::assertNull(Mqtt::getAppwriteEventParts('message.unknown'));
+        $this->assertNull(Mqtt::getAppwriteEventParts('message.unknown'));
     }
 }
