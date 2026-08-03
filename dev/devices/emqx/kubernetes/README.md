@@ -4,7 +4,7 @@ This example bootstraps a three-core-node EMQX 5.8 Open Source cluster with EMQX
 
 ## Build the Appwrite image
 
-The `Build and Push Appwrite Devices Image` GitHub Actions workflow builds the production target for `linux/amd64` and `linux/arm64`, then publishes:
+The existing `Release` GitHub Actions workflow builds the production target for `linux/amd64` and `linux/arm64`, then publishes:
 
 ```text
 DOCKERHUB_USERNAME/appwrite:<release-or-manual-tag>
@@ -16,7 +16,7 @@ Configure these GitHub repository secrets before running it:
 - `DOCKERHUB_USERNAME`: Docker Hub account or organization name.
 - `DOCKERHUB_TOKEN`: Docker Hub access token with permission to push the `appwrite` repository.
 
-For a test build, run the workflow manually and provide a tag such as `devices-2026-08-03`. Published GitHub releases use the release tag automatically. Configure the Appwrite Kubernetes workload to use the immutable tag or, preferably, the digest shown in the workflow summary:
+Publish a GitHub release or run the `Release` workflow manually with a tag such as `devices-2026-08-03`. Configure the Appwrite Kubernetes workload to use that immutable tag:
 
 ```yaml
 image: DOCKERHUB_USERNAME/appwrite:devices-2026-08-03
