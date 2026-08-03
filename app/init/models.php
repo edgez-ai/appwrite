@@ -73,6 +73,8 @@ use Appwrite\Utopia\Response\Model\DetectionFramework;
 use Appwrite\Utopia\Response\Model\DetectionRuntime;
 use Appwrite\Utopia\Response\Model\DetectionVariable;
 use Appwrite\Utopia\Response\Model\DevKey;
+use Appwrite\Utopia\Response\Model\Device;
+use Appwrite\Utopia\Response\Model\DeviceCredential;
 use Appwrite\Utopia\Response\Model\Document as ModelDocument;
 use Appwrite\Utopia\Response\Model\Embedding;
 use Appwrite\Utopia\Response\Model\EphemeralKey;
@@ -300,10 +302,13 @@ Response::setModel(new BaseList('VectorsDB Collections List', Response::MODEL_VE
 Response::setModel(new BaseList('Embedding list', Response::MODEL_EMBEDDING_LIST, 'embeddings', Response::MODEL_EMBEDDING));
 Response::setModel(new BaseList('Insights List', Response::MODEL_INSIGHT_LIST, 'insights', Response::MODEL_INSIGHT));
 Response::setModel(new BaseList('Reports List', Response::MODEL_REPORT_LIST, 'reports', Response::MODEL_REPORT));
+Response::setModel(new BaseList('Devices List', Response::MODEL_DEVICE_LIST, 'devices', Response::MODEL_DEVICE));
 
 // Entities
 Response::setModel(new Database());
 Response::setModel(new Embedding());
+Response::setModel(new Device());
+Response::setModel(new DeviceCredential());
 
 // Collection API Models
 Response::setModel(new Collection());

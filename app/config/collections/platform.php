@@ -2392,6 +2392,56 @@ $platformCollections = [
 
 ];
 
+$platformCollections['deviceRoutes'] = [
+    '$collection' => ID::custom(Database::METADATA),
+    '$id' => ID::custom('deviceRoutes'),
+    'name' => 'Device Routes',
+    'attributes' => [
+        [
+            '$id' => ID::custom('projectId'),
+            'type' => Database::VAR_STRING,
+            'format' => '',
+            'size' => Database::LENGTH_KEY,
+            'signed' => true,
+            'required' => true,
+            'default' => null,
+            'array' => false,
+            'filters' => [],
+        ],
+        [
+            '$id' => ID::custom('deviceId'),
+            'type' => Database::VAR_STRING,
+            'format' => '',
+            'size' => Database::LENGTH_KEY,
+            'signed' => true,
+            'required' => true,
+            'default' => null,
+            'array' => false,
+            'filters' => [],
+        ],
+        [
+            '$id' => ID::custom('serial'),
+            'type' => Database::VAR_STRING,
+            'format' => '',
+            'size' => Database::LENGTH_KEY,
+            'signed' => true,
+            'required' => true,
+            'default' => null,
+            'array' => false,
+            'filters' => [],
+        ],
+    ],
+    'indexes' => [
+        [
+            '$id' => ID::custom('_key_project'),
+            'type' => Database::INDEX_KEY,
+            'attributes' => ['projectId'],
+            'lengths' => [Database::LENGTH_KEY],
+            'orders' => [Database::ORDER_ASC],
+        ],
+    ],
+];
+
 // Organization API keys subquery
 $platformCollections['teams']['attributes'][] = [
     '$id' => ID::custom('keys'),

@@ -788,6 +788,16 @@ class Deletes extends Action
             Console::error('Failed to delete schedules: ' . $th->getMessage());
         }
 
+        // Delete device routes
+        try {
+            $this->deleteByGroup('deviceRoutes', [
+                Query::equal('projectId', [$projectId]),
+                Query::orderAsc()
+            ], $dbForPlatform);
+        } catch (Throwable $th) {
+            Console::error('Failed to delete device routes: ' . $th->getMessage());
+        }
+
         // Delete Advisor insights
         try {
             $this->deleteByGroup('insights', [

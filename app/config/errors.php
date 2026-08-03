@@ -393,6 +393,23 @@ return [
         'code' => 401,
     ],
 
+    /** Devices */
+    Exception::DEVICE_NOT_FOUND => [
+        'name' => Exception::DEVICE_NOT_FOUND,
+        'description' => 'Device with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::DEVICE_ALREADY_EXISTS => [
+        'name' => Exception::DEVICE_ALREADY_EXISTS,
+        'description' => 'A device with the requested ID or serial number already exists.',
+        'code' => 409,
+    ],
+    Exception::DEVICE_CREDENTIAL_NOT_FOUND => [
+        'name' => Exception::DEVICE_CREDENTIAL_NOT_FOUND,
+        'description' => 'Credentials for the requested device could not be found.',
+        'code' => 404,
+    ],
+
     /** Teams */
     Exception::TEAM_NOT_FOUND => [
         'name' => Exception::TEAM_NOT_FOUND,

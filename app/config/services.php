@@ -155,6 +155,20 @@ return [
         'icon' => '/images/services/storage.png',
         'platforms' => ['client', 'server', 'console'],
     ],
+    'devices' => [
+        'key' => 'devices',
+        'name' => 'Devices',
+        'subtitle' => 'The Devices service lets you register, authorize, and connect project-scoped MQTT devices.',
+        'description' => '/docs/services/devices.md',
+        'controller' => '', // Uses modules
+        'sdk' => true,
+        'docs' => true,
+        'docsUrl' => '',
+        'tests' => false,
+        'optional' => true,
+        'icon' => '',
+        'platforms' => ['client', 'server', 'console'],
+    ],
     'teams' => [
         'key' => 'teams',
         'name' => 'Teams',

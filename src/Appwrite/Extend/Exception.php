@@ -116,6 +116,11 @@ class Exception extends \Exception
     public const string USER_JWT_AND_COOKIE_SET = 'user_jwt_and_cookie_set';
     public const string USER_ID_MISSING = 'user_id_missing';
 
+    /** Devices */
+    public const string DEVICE_NOT_FOUND = 'device_not_found';
+    public const string DEVICE_ALREADY_EXISTS = 'device_already_exists';
+    public const string DEVICE_CREDENTIAL_NOT_FOUND = 'device_credential_not_found';
+
     public const string API_KEY_EXPIRED = 'api_key_expired';
 
     /** Teams */

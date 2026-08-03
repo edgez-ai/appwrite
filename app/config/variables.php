@@ -1204,6 +1204,21 @@ return [
         ],
     ],
     [
+        'category' => 'Devices',
+        'description' => '',
+        'variables' => [
+            [
+                'name' => '_APP_DEVICES_EMQX_SECRET',
+                'description' => 'Shared secret used to authenticate EMQX requests to the internal device session endpoint. Use a cryptographically random value and do not expose it to MQTT clients.',
+                'introduction' => '1.10.0',
+                'default' => '',
+                'required' => false,
+                'question' => '',
+                'filter' => '',
+            ],
+        ],
+    ],
+    [
         'category' => 'Maintenance',
         'description' => '',
         'variables' => [

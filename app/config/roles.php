@@ -16,6 +16,8 @@ $member = [
     'presences.write',
     'documents.read',
     'documents.write',
+    'devices.read',
+    'devices.write',
     'rows.read',
     'rows.write',
     'files.read',
@@ -111,6 +113,8 @@ $admins = [
     'insights.write',
     'reports.read',
     'reports.write',
+    'devices.read',
+    'devices.write',
 ];
 
 return [

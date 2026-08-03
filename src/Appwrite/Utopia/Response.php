@@ -156,6 +156,11 @@ class Response extends SwooleResponse
     public const MODEL_RESOURCE_TOKEN = 'resourceToken';
     public const MODEL_RESOURCE_TOKEN_LIST = 'resourceTokenList';
 
+    // Devices
+    public const MODEL_DEVICE = 'device';
+    public const MODEL_DEVICE_LIST = 'deviceList';
+    public const MODEL_DEVICE_CREDENTIAL = 'deviceCredential';
+
     // Locale
     public const MODEL_LOCALE = 'locale';
     public const MODEL_LOCALE_CODE = 'localeCode';

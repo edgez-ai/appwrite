@@ -95,6 +95,16 @@ return [
         'description' => 'Access to create, update, and delete users',
         'category' => 'Auth',
     ],
+
+    // Devices
+    'devices.read' => [
+        'description' => 'Access to read devices',
+        'category' => 'Devices',
+    ],
+    'devices.write' => [
+        'description' => 'Access to create, update, delete, and manage device credentials',
+        'category' => 'Devices',
+    ],
     'sessions.read' => [
         'description' => 'Access to read user sessions',
         'category' => 'Auth',

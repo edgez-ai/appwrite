@@ -42,7 +42,7 @@ class BaseList extends Model
                 'documents', 'collections', // legacy api
                 'users', 'files', 'buckets', 'functions',
                 'deployments', 'executions', 'projects',
-                'webhooks', 'keys', 'platforms', 'rules', 'memberships', 'teams'
+                'webhooks', 'keys', 'platforms', 'rules', 'memberships', 'teams', 'devices'
             ];
 
             if (\in_array($name, $namesWithCap)) {

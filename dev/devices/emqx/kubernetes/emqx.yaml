@@ -1,0 +1,41 @@
+apiVersion: apps.emqx.io/v2beta1
+kind: EMQX
+metadata:
+  name: appwrite-emqx
+  namespace: appwrite
+spec:
+  image: emqx/emqx:5.8.9@sha256:35b46f7aa7a0d51f3959e4344221ac5ec7f948b03e43099286b6c40a07bb393b
+  imagePullPolicy: IfNotPresent
+  config:
+    data: |
+      authorization {
+        no_match = deny
+        deny_action = ignore
+      }
+  coreTemplate:
+    spec:
+      replicas: 3
+      env:
+        - name: EMQX_AUTHENTICATION
+          valueFrom:
+            secretKeyRef:
+              name: appwrite-emqx-authentication
+              key: authentication
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          memory: 1Gi
+      volumeClaimTemplates:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+  listenersServiceTemplate:
+    spec:
+      type: ClusterIP
+  dashboardServiceTemplate:
+    spec:
+      type: ClusterIP

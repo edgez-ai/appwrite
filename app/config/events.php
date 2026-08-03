@@ -7,6 +7,31 @@
 use Appwrite\Utopia\Response;
 
 return [
+    'devices' => [
+        '$model' => Response::MODEL_DEVICE,
+        '$resource' => true,
+        '$description' => 'This event triggers on any device event.',
+        'credentials' => [
+            '$model' => Response::MODEL_DEVICE_CREDENTIAL,
+            '$resource' => true,
+            '$description' => 'This event triggers on device credential changes.',
+            'create' => [
+                '$description' => 'This event triggers when device credentials are created or rotated.',
+            ],
+            'delete' => [
+                '$description' => 'This event triggers when device credentials are revoked.',
+            ],
+        ],
+        'create' => [
+            '$description' => 'This event triggers when a device is created.',
+        ],
+        'update' => [
+            '$description' => 'This event triggers when a device is updated.',
+        ],
+        'delete' => [
+            '$description' => 'This event triggers when a device is deleted.',
+        ],
+    ],
     'users' => [
         '$model' => Response::MODEL_USER,
         '$resource' => true,
