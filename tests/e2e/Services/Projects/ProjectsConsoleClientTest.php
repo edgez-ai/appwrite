@@ -5777,6 +5777,18 @@ final class ProjectsConsoleClientTest extends Scope
 
         $this->assertEquals(200, $project['headers']['status-code']);
 
+        $variable = $this->client->call(Client::METHOD_POST, '/project/variables', array_merge([
+            'content-type' => 'application/json',
+            'x-appwrite-project' => $projectId,
+            'x-appwrite-mode' => 'admin',
+        ], $this->getHeaders()), [
+            'variableId' => ID::unique(),
+            'key' => 'PROJECT_DELETE_VARIABLE',
+            'value' => 'value',
+        ]);
+
+        $this->assertEquals(201, $variable['headers']['status-code']);
+
         // Delete Project
         $project = $this->client->call(Client::METHOD_DELETE, '/projects/' . $projectId, array_merge([
             'content-type' => 'application/json',

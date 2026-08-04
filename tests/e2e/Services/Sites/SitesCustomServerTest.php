@@ -1820,6 +1820,43 @@ final class SitesCustomServerTest extends Scope
         $this->assertEquals(404, $function['headers']['status-code']);
     }
 
+    public function testDeleteSiteRemovesVariablesSynchronously(): void
+    {
+        $siteId = ID::unique();
+        $variableKey = 'DELETE_REUSE_' . ID::unique();
+        $site = [
+            'siteId' => $siteId,
+            'name' => 'Test Variable Cleanup Site',
+            'framework' => 'other',
+            'buildRuntime' => 'node-22',
+            'outputDirectory' => './',
+            'fallbackFile' => '',
+        ];
+
+        $this->setupSite($site);
+
+        $variable = $this->createVariable($siteId, [
+            'variableId' => ID::unique(),
+            'key' => $variableKey,
+            'value' => 'value',
+        ]);
+
+        $this->assertEquals(201, $variable['headers']['status-code']);
+        $this->assertEquals(204, $this->deleteSite($siteId)['headers']['status-code']);
+
+        $site['name'] = 'Recreated Variable Cleanup Site';
+        $this->setupSite($site);
+
+        $variable = $this->createVariable($siteId, [
+            'variableId' => ID::unique(),
+            'key' => $variableKey,
+            'value' => 'value',
+        ]);
+
+        $this->assertEquals(201, $variable['headers']['status-code']);
+        $this->assertEquals(204, $this->deleteSite($siteId)['headers']['status-code']);
+    }
+
     public function testDeleteSiteRulesCleanup(): void
     {
         $siteId = $this->setupSite([

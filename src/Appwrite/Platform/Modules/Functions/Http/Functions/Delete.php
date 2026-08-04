@@ -15,6 +15,7 @@ use Appwrite\Utopia\Response;
 use Utopia\Database\Database;
 use Utopia\Database\DateTime;
 use Utopia\Database\Document;
+use Utopia\Database\Query;
 use Utopia\Database\Validator\Authorization;
 use Utopia\Database\Validator\UID;
 use Utopia\Platform\Action;
@@ -81,6 +82,11 @@ class Delete extends Base
         if ($function->isEmpty()) {
             throw new Exception(Exception::FUNCTION_NOT_FOUND);
         }
+
+        $authorization->skip(fn () => $dbForProject->deleteDocuments('variables', [
+            Query::equal('resourceInternalId', [$function->getSequence()]),
+            Query::equal('resourceType', ['function']),
+        ]));
 
         if (!$dbForProject->deleteDocument('functions', $function->getId())) {
             throw new Exception(Exception::GENERAL_SERVER_ERROR, 'Failed to remove function from DB');

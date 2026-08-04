@@ -2026,6 +2026,49 @@ final class FunctionsCustomServerTest extends Scope
         $this->assertEquals(404, $function['headers']['status-code']);
     }
 
+    public function testDeleteFunctionRemovesVariablesSynchronously(): void
+    {
+        $functionId = ID::unique();
+        $variableKey = 'DELETE_REUSE_' . ID::unique();
+        $function = $this->createFunction([
+            'functionId' => $functionId,
+            'name' => 'Test Variable Cleanup Function',
+            'runtime' => 'node-22',
+            'entrypoint' => 'index.js',
+            'timeout' => 15,
+        ]);
+
+        $this->assertEquals(201, $function['headers']['status-code']);
+
+        $variable = $this->createVariable($functionId, [
+            'variableId' => ID::unique(),
+            'key' => $variableKey,
+            'value' => 'value',
+        ]);
+
+        $this->assertEquals(201, $variable['headers']['status-code']);
+        $this->assertEquals(204, $this->deleteFunction($functionId)['headers']['status-code']);
+
+        $function = $this->createFunction([
+            'functionId' => $functionId,
+            'name' => 'Recreated Variable Cleanup Function',
+            'runtime' => 'node-22',
+            'entrypoint' => 'index.js',
+            'timeout' => 15,
+        ]);
+
+        $this->assertEquals(201, $function['headers']['status-code']);
+
+        $variable = $this->createVariable($functionId, [
+            'variableId' => ID::unique(),
+            'key' => $variableKey,
+            'value' => 'value',
+        ]);
+
+        $this->assertEquals(201, $variable['headers']['status-code']);
+        $this->assertEquals(204, $this->deleteFunction($functionId)['headers']['status-code']);
+    }
+
     public function testDeleteFunctionRulesCleanup(): void
     {
         $functionId = $this->setupFunction([

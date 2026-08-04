@@ -57,6 +57,7 @@ class Delete extends Action
             ->inject('publisherForDeletes')
             ->inject('authorization')
             ->inject('project')
+            ->inject('getProjectDB')
             ->callback($this->action(...));
     }
 
@@ -66,7 +67,11 @@ class Delete extends Action
         DeletePublisher $publisherForDeletes,
         Authorization $authorization,
         Document $project,
+        callable $getProjectDB,
     ) {
+        $dbForProject = $getProjectDB($project);
+        $authorization->skip(fn () => $dbForProject->deleteDocuments('variables', []));
+
         if (!$authorization->skip(fn () => $dbForPlatform->deleteDocument('projects', $project->getId()))) {
             throw new Exception(Exception::GENERAL_SERVER_ERROR, 'Failed to remove project from DB');
         }

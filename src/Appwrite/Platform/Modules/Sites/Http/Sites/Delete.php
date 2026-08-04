@@ -13,6 +13,8 @@ use Appwrite\SDK\Method;
 use Appwrite\SDK\Response as SDKResponse;
 use Appwrite\Utopia\Response;
 use Utopia\Database\Database;
+use Utopia\Database\Query;
+use Utopia\Database\Validator\Authorization;
 use Utopia\Database\Validator\UID;
 use Utopia\Platform\Action;
 use Utopia\Platform\Scope\HTTP;
@@ -59,6 +61,7 @@ class Delete extends Base
             ->inject('dbForProject')
             ->inject('publisherForDeletes')
             ->inject('queueForEvents')
+            ->inject('authorization')
             ->callback($this->action(...));
     }
 
@@ -67,13 +70,19 @@ class Delete extends Base
         Response $response,
         Database $dbForProject,
         DeletePublisher $publisherForDeletes,
-        Event $queueForEvents
+        Event $queueForEvents,
+        Authorization $authorization
     ) {
         $site = $dbForProject->getDocument('sites', $siteId);
 
         if ($site->isEmpty()) {
             throw new Exception(Exception::SITE_NOT_FOUND);
         }
+
+        $authorization->skip(fn () => $dbForProject->deleteDocuments('variables', [
+            Query::equal('resourceInternalId', [$site->getSequence()]),
+            Query::equal('resourceType', ['site']),
+        ]));
 
         if (!$dbForProject->deleteDocument('sites', $site->getId())) {
             throw new Exception(Exception::GENERAL_SERVER_ERROR, 'Failed to remove site from DB');
