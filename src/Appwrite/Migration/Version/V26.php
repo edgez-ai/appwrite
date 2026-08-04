@@ -29,5 +29,6 @@ class V26 extends Migration
         Console::info('Creating device collections');
         $this->createCollection('devices');
         $this->createCollection('deviceCredentials');
+        $this->createAttributesFromCollection($this->dbForProject, 'devices', ['mqttConnectedAt']);
     }
 }

@@ -3,6 +3,7 @@
 namespace Appwrite\Platform\Modules\Devices\Http\Devices\Events;
 
 use Appwrite\Devices\Mqtt;
+use Appwrite\Devices\Presence;
 use Appwrite\Event\Event;
 use Appwrite\Event\Message\Func as FunctionMessage;
 use Appwrite\Event\Publisher\Func as FunctionPublisher;
@@ -97,13 +98,35 @@ class Create extends Action
         }
 
         $dbForProject = $getProjectDB($project);
+        $deviceId = $route->getAttribute('deviceId', '');
+        $device = $authorization->skip(fn () => $dbForProject->getDocument('devices', $deviceId));
+        if ($device->isEmpty()) {
+            $response
+                ->setStatusCode(Response::STATUS_CODE_ACCEPTED)
+                ->json([
+                    'accepted' => false,
+                    'event' => $event,
+                    'reason' => 'device_not_found',
+                ]);
+            return;
+        }
+
+        $presenceChanges = Presence::getChanges($event, $payload, $device);
+        if (!empty($presenceChanges)) {
+            $authorization->skip(fn () => $dbForProject->updateDocument(
+                'devices',
+                $deviceId,
+                new Document($presenceChanges),
+            ));
+        }
+
         $mqttCategory = $eventParts['category'];
         $mqttAction = $eventParts['action'];
         $appwriteEvent = 'devices.[deviceId].mqtt.[mqttCategory].' . $mqttAction;
         $queueForEvents
             ->setProject($project)
             ->setEvent($appwriteEvent)
-            ->setParam('deviceId', $route->getAttribute('deviceId', ''))
+            ->setParam('deviceId', $deviceId)
             ->setParam('mqttCategory', $mqttCategory)
             ->setPayload($payload);
 

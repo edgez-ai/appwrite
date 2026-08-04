@@ -92,6 +92,7 @@ class Create extends Action
             'enabled' => $enabled,
             'status' => 'offline',
             'lastSeenAt' => null,
+            'mqttConnectedAt' => null,
             'metadata' => $metadata,
             'search' => \implode(' ', [$deviceId, $serial, $name]),
         ]);

@@ -167,6 +167,12 @@ final class MigrationVersionsTest extends TestCase
         $this->assertTrue($database->getCollection('sites')->isEmpty());
         $this->assertFalse($database->getCollection('devices')->isEmpty());
         $this->assertFalse($database->getCollection('deviceCredentials')->isEmpty());
+
+        $deviceAttributes = [];
+        foreach ($database->getCollection('devices')->getAttribute('attributes', []) as $attribute) {
+            $deviceAttributes[] = $attribute instanceof Document ? $attribute->getAttribute('$id') : ($attribute['$id'] ?? '');
+        }
+        $this->assertContains('mqttConnectedAt', $deviceAttributes);
     }
 
     public function testV25CreatesDeviceRouteCollectionForConsole(): void

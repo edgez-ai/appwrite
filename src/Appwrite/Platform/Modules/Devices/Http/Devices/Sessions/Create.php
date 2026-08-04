@@ -112,14 +112,9 @@ class Create extends Action
             return;
         }
 
-        $now = DateTime::now();
-        $authorization->skip(function () use ($dbForProject, $device, $credential, $now): void {
-            $dbForProject->updateDocument('devices', $device->getId(), new Document([
-                'status' => 'online',
-                'lastSeenAt' => $now,
-            ]));
+        $authorization->skip(function () use ($dbForProject, $credential): void {
             $dbForProject->updateDocument('deviceCredentials', $credential->getId(), new Document([
-                'lastUsedAt' => $now,
+                'lastUsedAt' => DateTime::now(),
             ]));
         });
 

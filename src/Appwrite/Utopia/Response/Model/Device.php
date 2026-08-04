@@ -78,6 +78,7 @@ class Device extends Model
     public function filter(Document $document): Document
     {
         $document->removeAttribute('search');
+        $document->removeAttribute('mqttConnectedAt');
 
         return $document;
     }

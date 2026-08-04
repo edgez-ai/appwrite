@@ -2776,6 +2776,17 @@ return [
                 'filters' => ['datetime'],
             ],
             [
+                '$id' => ID::custom('mqttConnectedAt'),
+                'type' => Database::VAR_INTEGER,
+                'format' => '',
+                'size' => 8,
+                'required' => false,
+                'default' => null,
+                'signed' => false,
+                'array' => false,
+                'filters' => [],
+            ],
+            [
                 '$id' => ID::custom('metadata'),
                 'type' => Database::VAR_TEXT,
                 'size' => 65535,
