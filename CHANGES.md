@@ -1,3 +1,20 @@
+# Version 1.9.9
+
+## What's Changed
+
+### Notable changes
+
+* Add a dedicated Project section in the Console with Tasks and Stickers navigation.
+
+### Fixes
+
+* Ensure project management collections are available to existing projects through the registered migration path.
+
+### Miscellaneous
+
+* Update the self-hosted Console image to 8.7.42.
+* Update release metadata and installation examples for 1.9.9.
+
 # Version 1.9.8
 
 ## What's Changed
