@@ -1,3 +1,20 @@
+# Version 1.9.8
+
+## What's Changed
+
+### Notable changes
+
+* Add project-scoped Tasks, Stickers, agent execution context, chat bindings, and agent-friendly project management APIs.
+
+### Fixes
+
+* Register the 1.9.8 migration so existing projects receive the project management collections.
+
+### Miscellaneous
+
+* Update the self-hosted Console image to 8.7.41.
+* Update release metadata and installation examples for 1.9.8.
+
 # Version 1.9.6
 
 ## What's Changed
