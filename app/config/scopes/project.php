@@ -105,6 +105,16 @@ return [
         'description' => 'Access to create, update, delete, and manage device credentials',
         'category' => 'Devices',
     ],
+
+    // Project Management
+    'projectManagement.read' => [
+        'description' => 'Access to read project management tasks, context, evidence, and activity',
+        'category' => 'Project Management',
+    ],
+    'projectManagement.write' => [
+        'description' => 'Access to manage project tasks, knowledge, agent runs, evidence, and chat bindings',
+        'category' => 'Project Management',
+    ],
     'sessions.read' => [
         'description' => 'Access to read user sessions',
         'category' => 'Auth',

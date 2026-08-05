@@ -455,6 +455,12 @@ const RESOURCE_TYPE_EMBEDDINGS_TEXT = 'embeddingsText';
 const RESOURCE_TYPE_INSIGHTS = 'insights';
 const RESOURCE_TYPE_REPORTS = 'reports';
 const RESOURCE_TYPE_DEVICES = 'devices';
+const RESOURCE_TYPE_PROJECT_TASKS = 'projectTasks';
+const RESOURCE_TYPE_STICKERS = 'stickers';
+const RESOURCE_TYPE_STICKER_GROUPS = 'stickerGroups';
+const RESOURCE_TYPE_AGENT_RUNS = 'agentRuns';
+const RESOURCE_TYPE_EVIDENCE = 'evidence';
+const RESOURCE_TYPE_CHAT_BINDINGS = 'chatBindings';
 
 // Insight types — engine-specific so the CTA action can reference the right public API.
 const ADVISOR_INSIGHT_TYPES = [

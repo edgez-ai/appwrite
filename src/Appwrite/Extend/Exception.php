@@ -121,6 +121,18 @@ class Exception extends \Exception
     public const string DEVICE_ALREADY_EXISTS = 'device_already_exists';
     public const string DEVICE_CREDENTIAL_NOT_FOUND = 'device_credential_not_found';
 
+    /** Project Management */
+    public const string PROJECT_TASK_NOT_FOUND = 'project_task_not_found';
+    public const string PROJECT_TASK_ALREADY_EXISTS = 'project_task_already_exists';
+    public const string PROJECT_TASK_STATUS_CONFLICT = 'project_task_status_conflict';
+    public const string PROJECT_RESOURCE_ALREADY_EXISTS = 'project_resource_already_exists';
+    public const string STICKER_NOT_FOUND = 'sticker_not_found';
+    public const string STICKER_GROUP_NOT_FOUND = 'sticker_group_not_found';
+    public const string AGENT_RUN_NOT_FOUND = 'agent_run_not_found';
+    public const string AGENT_RUN_STATUS_CONFLICT = 'agent_run_status_conflict';
+    public const string CHAT_BINDING_NOT_FOUND = 'chat_binding_not_found';
+    public const string CHAT_BINDING_ALREADY_EXISTS = 'chat_binding_already_exists';
+
     public const string API_KEY_EXPIRED = 'api_key_expired';
 
     /** Teams */

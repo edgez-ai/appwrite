@@ -15,6 +15,7 @@ use Appwrite\Platform\Modules\Migrations;
 use Appwrite\Platform\Modules\Organization;
 use Appwrite\Platform\Modules\Presences;
 use Appwrite\Platform\Modules\Project;
+use Appwrite\Platform\Modules\ProjectManagement;
 use Appwrite\Platform\Modules\Projects;
 use Appwrite\Platform\Modules\Proxy;
 use Appwrite\Platform\Modules\Sites;
@@ -49,6 +50,7 @@ class Appwrite extends Platform
         $this->addModule(new Migrations\Module());
         $this->addModule(new Organization\Module());
         $this->addModule(new Project\Module());
+        $this->addModule(new ProjectManagement\Module());
         $this->addModule(new Advisor\Module());
     }
 }

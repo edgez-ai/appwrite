@@ -7,6 +7,62 @@
 use Appwrite\Utopia\Response;
 
 return [
+    'tasks' => [
+        '$model' => Response::MODEL_PROJECT_TASK,
+        '$resource' => true,
+        '$description' => 'This event triggers on project task changes.',
+        'create' => ['$description' => 'This event triggers when a project task is created.'],
+        'update' => [
+            '$description' => 'This event triggers when a project task is updated.',
+            'status' => ['$description' => 'This event triggers on an optimistic task status transition.'],
+        ],
+        'claim' => ['$description' => 'This event triggers when an agent atomically claims a task.'],
+        'delete' => ['$description' => 'This event triggers when a project task is deleted.'],
+    ],
+    'stickers' => [
+        '$model' => Response::MODEL_STICKER,
+        '$resource' => true,
+        '$description' => 'This event triggers on immutable project knowledge changes.',
+        'create' => ['$description' => 'This event triggers when a Sticker is created.'],
+        'update' => [
+            '$description' => 'This event triggers when Sticker metadata changes.',
+            'status' => ['$description' => 'This event triggers when Sticker validity changes.'],
+        ],
+    ],
+    'stickerGroups' => [
+        '$model' => Response::MODEL_STICKER_GROUP,
+        '$resource' => true,
+        '$description' => 'This event triggers on Sticker Group changes.',
+        'summaries' => [
+            '$model' => Response::MODEL_STICKER_GROUP_SUMMARY,
+            '$resource' => true,
+            '$description' => 'This event triggers on versioned Sticker Group summaries.',
+            'create' => ['$description' => 'This event triggers when a summary version is created.'],
+        ],
+        'create' => ['$description' => 'This event triggers when a Sticker Group is created.'],
+        'update' => ['$description' => 'This event triggers when a Sticker Group is updated.'],
+        'delete' => ['$description' => 'This event triggers when a Sticker Group is deleted.'],
+    ],
+    'agentRuns' => [
+        '$model' => Response::MODEL_AGENT_RUN,
+        '$resource' => true,
+        '$description' => 'This event triggers on agent execution changes.',
+        'create' => ['$description' => 'This event triggers when an agent run is queued.'],
+        'update' => ['$description' => 'This event triggers when an agent run changes state.'],
+    ],
+    'evidence' => [
+        '$model' => Response::MODEL_EVIDENCE,
+        '$resource' => true,
+        '$description' => 'This event triggers when execution evidence is attached.',
+        'create' => ['$description' => 'This event triggers when evidence is created.'],
+    ],
+    'chatBindings' => [
+        '$model' => Response::MODEL_CHAT_BINDING,
+        '$resource' => true,
+        '$description' => 'This event triggers on chat binding changes.',
+        'create' => ['$description' => 'This event triggers when a chat conversation is bound.'],
+        'delete' => ['$description' => 'This event triggers when a chat binding is removed.'],
+    ],
     'devices' => [
         '$model' => Response::MODEL_DEVICE,
         '$resource' => true,

@@ -410,6 +410,58 @@ return [
         'code' => 404,
     ],
 
+    /** Project Management */
+    Exception::PROJECT_TASK_NOT_FOUND => [
+        'name' => Exception::PROJECT_TASK_NOT_FOUND,
+        'description' => 'Project task with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::PROJECT_TASK_ALREADY_EXISTS => [
+        'name' => Exception::PROJECT_TASK_ALREADY_EXISTS,
+        'description' => 'A project task with the requested ID already exists.',
+        'code' => 409,
+    ],
+    Exception::PROJECT_TASK_STATUS_CONFLICT => [
+        'name' => Exception::PROJECT_TASK_STATUS_CONFLICT,
+        'description' => 'The project task status changed or the requested transition is not allowed.',
+        'code' => 409,
+    ],
+    Exception::PROJECT_RESOURCE_ALREADY_EXISTS => [
+        'name' => Exception::PROJECT_RESOURCE_ALREADY_EXISTS,
+        'description' => 'A project-management resource with this ID already exists with different input.',
+        'code' => 409,
+    ],
+    Exception::STICKER_NOT_FOUND => [
+        'name' => Exception::STICKER_NOT_FOUND,
+        'description' => 'Sticker with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::STICKER_GROUP_NOT_FOUND => [
+        'name' => Exception::STICKER_GROUP_NOT_FOUND,
+        'description' => 'Sticker Group with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::AGENT_RUN_NOT_FOUND => [
+        'name' => Exception::AGENT_RUN_NOT_FOUND,
+        'description' => 'Agent Run with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::AGENT_RUN_STATUS_CONFLICT => [
+        'name' => Exception::AGENT_RUN_STATUS_CONFLICT,
+        'description' => 'The Agent Run status changed or the requested transition is not allowed.',
+        'code' => 409,
+    ],
+    Exception::CHAT_BINDING_NOT_FOUND => [
+        'name' => Exception::CHAT_BINDING_NOT_FOUND,
+        'description' => 'Chat binding with the requested ID could not be found.',
+        'code' => 404,
+    ],
+    Exception::CHAT_BINDING_ALREADY_EXISTS => [
+        'name' => Exception::CHAT_BINDING_ALREADY_EXISTS,
+        'description' => 'This chat conversation is already bound to the project.',
+        'code' => 409,
+    ],
+
     /** Teams */
     Exception::TEAM_NOT_FOUND => [
         'name' => Exception::TEAM_NOT_FOUND,

@@ -161,6 +161,27 @@ class Response extends SwooleResponse
     public const MODEL_DEVICE_LIST = 'deviceList';
     public const MODEL_DEVICE_CREDENTIAL = 'deviceCredential';
 
+    // Project Management
+    public const MODEL_PROJECT_TASK = 'projectTask';
+    public const MODEL_PROJECT_TASK_LIST = 'projectTaskList';
+    public const MODEL_STICKER = 'sticker';
+    public const MODEL_STICKER_LIST = 'stickerList';
+    public const MODEL_STICKER_GROUP = 'stickerGroup';
+    public const MODEL_STICKER_GROUP_LIST = 'stickerGroupList';
+    public const MODEL_STICKER_GROUP_SUMMARY = 'stickerGroupSummary';
+    public const MODEL_STICKER_GROUP_SUMMARY_LIST = 'stickerGroupSummaryList';
+    public const MODEL_AGENT_RUN = 'agentRun';
+    public const MODEL_AGENT_RUN_LIST = 'agentRunList';
+    public const MODEL_EVIDENCE = 'evidence';
+    public const MODEL_EVIDENCE_LIST = 'evidenceList';
+    public const MODEL_ACTIVITY_EVENT = 'activityEvent';
+    public const MODEL_ACTIVITY_EVENT_LIST = 'activityEventList';
+    public const MODEL_CHAT_BINDING = 'chatBinding';
+    public const MODEL_CHAT_BINDING_LIST = 'chatBindingList';
+    public const MODEL_TASK_EXECUTION_CONTEXT = 'taskExecutionContext';
+    public const MODEL_PROJECT_MANAGEMENT_CAPABILITIES = 'projectManagementCapabilities';
+    public const MODEL_PROJECT_MANAGEMENT_CONTEXT = 'projectManagementContext';
+
     // Locale
     public const MODEL_LOCALE = 'locale';
     public const MODEL_LOCALE_CODE = 'localeCode';

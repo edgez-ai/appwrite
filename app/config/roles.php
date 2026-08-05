@@ -18,6 +18,8 @@ $member = [
     'documents.write',
     'devices.read',
     'devices.write',
+    'projectManagement.read',
+    'projectManagement.write',
     'rows.read',
     'rows.write',
     'files.read',
@@ -115,6 +117,8 @@ $admins = [
     'reports.write',
     'devices.read',
     'devices.write',
+    'projectManagement.read',
+    'projectManagement.write',
 ];
 
 return [

@@ -7,6 +7,7 @@ namespace Tests\Unit\Migration;
 use Appwrite\Migration\Migration;
 use Appwrite\Migration\Version\V24;
 use Appwrite\Migration\Version\V25;
+use Appwrite\Migration\Version\V27;
 use PHPUnit\Framework\TestCase;
 use Utopia\Cache\Adapter\None;
 use Utopia\Cache\Cache;
@@ -173,6 +174,55 @@ final class MigrationVersionsTest extends TestCase
             $deviceAttributes[] = $attribute instanceof Document ? $attribute->getAttribute('$id') : ($attribute['$id'] ?? '');
         }
         $this->assertContains('mqttConnectedAt', $deviceAttributes);
+    }
+
+    public function testV27CreatesProjectManagementCollections(): void
+    {
+        require_once __DIR__ . '/../../../app/init.php';
+
+        $authorization = new Authorization();
+        $database = new Database(new Memory(), new Cache(new None()));
+        $database
+            ->setAuthorization($authorization)
+            ->setDatabase('migrationV27ProjectManagement')
+            ->setNamespace('migration_project_management_' . \uniqid());
+        $database->create();
+
+        $migration = new V27();
+        $migration->setProject(
+            new Document(['$id' => 'project', '$sequence' => '1']),
+            $database,
+            $database,
+            $authorization,
+        );
+
+        \ob_start();
+        try {
+            $migration->execute();
+        } finally {
+            \ob_end_clean();
+        }
+
+        foreach ([
+            'projectTasks',
+            'stickers',
+            'stickerGroups',
+            'stickerGroupSummaries',
+            'agentRuns',
+            'evidence',
+            'activityEvents',
+            'chatBindings',
+        ] as $collectionId) {
+            $this->assertFalse($database->getCollection($collectionId)->isEmpty(), $collectionId);
+        }
+
+        $taskAttributes = [];
+        foreach ($database->getCollection('projectTasks')->getAttribute('attributes', []) as $attribute) {
+            $taskAttributes[] = $attribute instanceof Document ? $attribute->getAttribute('$id') : ($attribute['$id'] ?? '');
+        }
+        foreach (['claimedByType', 'claimedById', 'claimedAt', 'agentRunId'] as $attribute) {
+            $this->assertContains($attribute, $taskAttributes);
+        }
     }
 
     public function testV25CreatesDeviceRouteCollectionForConsole(): void
