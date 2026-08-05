@@ -169,6 +169,20 @@ return [
         'icon' => '',
         'platforms' => ['client', 'server', 'console'],
     ],
+    'projectManagement' => [
+        'key' => 'projectManagement',
+        'name' => 'Project Management',
+        'subtitle' => 'The Project Management service coordinates tasks, project knowledge, agents, and chat conversations.',
+        'description' => '',
+        'controller' => '', // Uses modules
+        'sdk' => true,
+        'docs' => true,
+        'docsUrl' => '',
+        'tests' => false,
+        'optional' => true,
+        'icon' => '',
+        'platforms' => ['client', 'server', 'console'],
+    ],
     'teams' => [
         'key' => 'teams',
         'name' => 'Teams',
