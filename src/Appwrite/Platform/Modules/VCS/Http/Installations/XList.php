@@ -7,6 +7,7 @@ use Appwrite\Platform\Action;
 use Appwrite\SDK\AuthType;
 use Appwrite\SDK\Method;
 use Appwrite\SDK\Response as SDKResponse;
+use Appwrite\Utopia\Database\Documents\User;
 use Appwrite\Utopia\Database\Validator\Queries\Installations;
 use Appwrite\Utopia\Response;
 use Utopia\Database\Database;
@@ -14,6 +15,7 @@ use Utopia\Database\Document;
 use Utopia\Database\Exception\Order as OrderException;
 use Utopia\Database\Exception\Query as QueryException;
 use Utopia\Database\Query;
+use Utopia\Database\Validator\Authorization;
 use Utopia\Database\Validator\Query\Cursor;
 use Utopia\Platform\Scope\HTTP;
 use Utopia\Validator\Boolean;
@@ -57,6 +59,8 @@ class XList extends Action
             ->inject('response')
             ->inject('project')
             ->inject('dbForPlatform')
+            ->inject('user')
+            ->inject('authorization')
             ->callback($this->action(...));
     }
 
@@ -67,7 +71,9 @@ class XList extends Action
         bool $includeAllProjects,
         Response $response,
         Document $project,
-        Database $dbForPlatform
+        Database $dbForPlatform,
+        User $user,
+        Authorization $authorization,
     ) {
         try {
             $queries = Query::parseQueries($queries);
@@ -75,7 +81,58 @@ class XList extends Action
             throw new Exception(Exception::GENERAL_QUERY_INVALID, $e->getMessage());
         }
 
-        if (!$includeAllProjects) {
+        $skipAuthorization = false;
+        if ($includeAllProjects && !$user->isEmpty()) {
+            $memberships = [];
+            foreach ($user->getAttribute('memberships', []) as $membership) {
+                if (!$membership->getAttribute('confirm', false)) {
+                    continue;
+                }
+
+                $roles = $membership->getAttribute('roles', []);
+                if (empty(array_filter(
+                    $roles,
+                    fn (string $role) => in_array($role, ['owner', 'developer'], true)
+                        || str_ends_with($role, '-owner')
+                        || str_ends_with($role, '-developer'),
+                ))) {
+                    continue;
+                }
+
+                $memberships[$membership->getAttribute('teamId')] = $roles;
+            }
+
+            $projects = empty($memberships) ? [] : $authorization->skip(
+                fn () => $dbForPlatform->find('projects', [
+                    Query::equal('teamId', array_keys($memberships)),
+                    Query::limit(APP_LIMIT_COUNT),
+                ]),
+            );
+            $projectInternalIds = [];
+            foreach ($projects as $accessibleProject) {
+                $roles = $memberships[$accessibleProject->getAttribute('teamId')] ?? [];
+                $projectId = $accessibleProject->getId();
+                if (!empty(array_intersect($roles, [
+                    'owner',
+                    'developer',
+                    "project-{$projectId}-owner",
+                    "project-{$projectId}-developer",
+                ]))) {
+                    $projectInternalIds[] = $accessibleProject->getSequence();
+                }
+            }
+
+            if (empty($projectInternalIds)) {
+                $response->dynamic(new Document([
+                    'installations' => [],
+                    'total' => 0,
+                ]), Response::MODEL_INSTALLATION_LIST);
+                return;
+            }
+
+            $queries[] = Query::equal('projectInternalId', $projectInternalIds);
+            $skipAuthorization = true;
+        } else {
             $queries[] = Query::equal('projectInternalId', [$project->getSequence()]);
         }
 
@@ -110,8 +167,16 @@ class XList extends Action
 
         $filterQueries = Query::groupByType($queries)['filters'];
         try {
-            $results = $dbForPlatform->find('installations', $queries);
-            $total = $includeTotal ? $dbForPlatform->count('installations', $filterQueries, APP_LIMIT_COUNT) : 0;
+            $results = $skipAuthorization
+                ? $authorization->skip(fn () => $dbForPlatform->find('installations', $queries))
+                : $dbForPlatform->find('installations', $queries);
+            $total = $includeTotal
+                ? ($skipAuthorization
+                    ? $authorization->skip(
+                        fn () => $dbForPlatform->count('installations', $filterQueries, APP_LIMIT_COUNT),
+                    )
+                    : $dbForPlatform->count('installations', $filterQueries, APP_LIMIT_COUNT))
+                : 0;
         } catch (OrderException $e) {
             throw new Exception(Exception::DATABASE_QUERY_ORDER_NULL, "The order attribute '{$e->getAttribute()}' had a null value. Cursor pagination requires all documents order attribute values are non-null.");
         }

@@ -8,11 +8,13 @@ use Appwrite\Platform\Permission as AppwritePermission;
 use Appwrite\SDK\AuthType;
 use Appwrite\SDK\Method;
 use Appwrite\SDK\Response as SDKResponse;
+use Appwrite\Utopia\Database\Documents\User;
 use Appwrite\Utopia\Response;
 use Utopia\Database\Database;
 use Utopia\Database\Document;
 use Utopia\Database\Helpers\ID;
 use Utopia\Database\Query;
+use Utopia\Database\Validator\Authorization;
 use Utopia\Platform\Scope\HTTP;
 use Utopia\Validator\Text;
 
@@ -52,6 +54,8 @@ class Create extends Action
             ->inject('response')
             ->inject('project')
             ->inject('dbForPlatform')
+            ->inject('user')
+            ->inject('authorization')
             ->callback($this->action(...));
     }
 
@@ -60,8 +64,23 @@ class Create extends Action
         Response $response,
         Document $project,
         Database $dbForPlatform,
+        User $user,
+        Authorization $authorization,
     ): void {
         $source = $dbForPlatform->getDocument('installations', $sourceInstallationId);
+
+        if ($source->isEmpty() && !$user->isEmpty()) {
+            $candidate = $authorization->skip(
+                fn () => $dbForPlatform->getDocument('installations', $sourceInstallationId),
+            );
+            $sourceProject = $authorization->skip(
+                fn () => $dbForPlatform->getDocument('projects', $candidate->getAttribute('projectId', '')),
+            );
+
+            if (!$candidate->isEmpty() && $this->canAccessProject($user, $sourceProject)) {
+                $source = $candidate;
+            }
+        }
 
         if ($source->isEmpty()) {
             throw new Exception(Exception::INSTALLATION_NOT_FOUND);
@@ -100,5 +119,27 @@ class Create extends Action
         $response
             ->setStatusCode(Response::STATUS_CODE_CREATED)
             ->dynamic($installation, Response::MODEL_INSTALLATION);
+    }
+
+    private function canAccessProject(User $user, Document $project): bool
+    {
+        if ($project->isEmpty()) {
+            return false;
+        }
+
+        $membership = $user->find('teamId', $project->getAttribute('teamId', ''), 'memberships');
+        if (empty($membership) || !$membership->getAttribute('confirm', false)) {
+            return false;
+        }
+
+        $roles = $membership->getAttribute('roles', []);
+        $projectId = $project->getId();
+
+        return !empty(array_intersect($roles, [
+            'owner',
+            'developer',
+            "project-{$projectId}-owner",
+            "project-{$projectId}-developer",
+        ]));
     }
 }
