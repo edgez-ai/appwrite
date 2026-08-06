@@ -6,6 +6,7 @@ use Appwrite\Platform\Modules\VCS\Http\GitHub\Authorize\External\Update as Updat
 use Appwrite\Platform\Modules\VCS\Http\GitHub\Authorize\Get as GetGitHubAuthorize;
 use Appwrite\Platform\Modules\VCS\Http\GitHub\Callback\Get as GetGitHubCallback;
 use Appwrite\Platform\Modules\VCS\Http\GitHub\Events\Create as CreateGitHubEvent;
+use Appwrite\Platform\Modules\VCS\Http\Installations\Create as CreateInstallation;
 use Appwrite\Platform\Modules\VCS\Http\Installations\Delete as DeleteInstallation;
 use Appwrite\Platform\Modules\VCS\Http\Installations\Get as GetInstallation;
 use Appwrite\Platform\Modules\VCS\Http\Installations\Repositories\Branches\XList as ListRepositoryBranches;
@@ -29,6 +30,7 @@ class Http extends Service
         $this->addAction(UpdateExternalDeployment::getName(), new UpdateExternalDeployment());
 
         // Installations
+        $this->addAction(CreateInstallation::getName(), new CreateInstallation());
         $this->addAction(GetInstallation::getName(), new GetInstallation());
         $this->addAction(ListInstallations::getName(), new ListInstallations());
         $this->addAction(DeleteInstallation::getName(), new DeleteInstallation());

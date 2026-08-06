@@ -53,6 +53,7 @@ class XList extends Action
             ->param('queries', [], new Installations(), 'Array of query strings generated using the Query class provided by the SDK. [Learn more about queries](https://appwrite.io/docs/queries). Maximum of ' . APP_LIMIT_ARRAY_PARAMS_SIZE . ' queries are allowed, each ' . APP_LIMIT_ARRAY_ELEMENT_SIZE . ' characters long. You may filter on the following attributes: ' . implode(', ', Installations::ALLOWED_ATTRIBUTES), true)
             ->param('search', '', new Text(256), 'Search term to filter your list results. Max length: 256 chars.', true)
             ->param('total', true, new Boolean(true), 'When set to false, the total count returned will be 0 and will not be calculated.', true)
+            ->param('includeAllProjects', false, new Boolean(), 'Include installations from other accessible projects.', true)
             ->inject('response')
             ->inject('project')
             ->inject('dbForPlatform')
@@ -63,6 +64,7 @@ class XList extends Action
         array $queries,
         string $search,
         bool $includeTotal,
+        bool $includeAllProjects,
         Response $response,
         Document $project,
         Database $dbForPlatform
@@ -73,7 +75,9 @@ class XList extends Action
             throw new Exception(Exception::GENERAL_QUERY_INVALID, $e->getMessage());
         }
 
-        $queries[] = Query::equal('projectInternalId', [$project->getSequence()]);
+        if (!$includeAllProjects) {
+            $queries[] = Query::equal('projectInternalId', [$project->getSequence()]);
+        }
 
         if (!empty($search)) {
             $queries[] = Query::search('search', $search);

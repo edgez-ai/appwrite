@@ -821,6 +821,102 @@ final class VCSConsoleClientTest extends Scope
         }
     }
 
+    public function testLinkInstallationAcrossOwnedProjects(): void
+    {
+        $sourceInstallationId = $this->setupInstallation();
+        $sourceInstallation = $this->client->call(
+            Client::METHOD_GET,
+            '/vcs/installations/' . $sourceInstallationId,
+            array_merge($this->getHeaders(), [
+                'x-appwrite-project' => $this->getProject()['$id'],
+            ]),
+        );
+        $consoleHeaders = [
+            'origin' => 'http://localhost',
+            'content-type' => 'application/json',
+            'cookie' => 'a_session_console=' . $this->getRoot()['session'],
+            'x-appwrite-project' => 'console',
+        ];
+
+        $team = $this->client->call(Client::METHOD_POST, '/teams', $consoleHeaders, [
+            'teamId' => ID::unique(),
+            'name' => 'Linked Installation Team',
+        ]);
+        $project = $this->client->call(Client::METHOD_POST, '/projects', $consoleHeaders, [
+            'projectId' => ID::unique(),
+            'name' => 'Linked Installation Project',
+            'teamId' => $team['body']['$id'],
+            'region' => System::getEnv('_APP_REGION', 'default'),
+        ]);
+        $projectId = $project['body']['$id'];
+
+        $key = $this->client->call(Client::METHOD_POST, '/projects/' . $projectId . '/keys', $consoleHeaders, [
+            'keyId' => ID::unique(),
+            'name' => 'Linked Installation Key',
+            'scopes' => ['vcs.read', 'vcs.write'],
+        ]);
+
+        try {
+            $serverHeaders = [
+                'content-type' => 'application/json',
+                'x-appwrite-project' => $projectId,
+                'x-appwrite-key' => $key['body']['secret'],
+            ];
+            $unavailable = $this->client->call(
+                Client::METHOD_GET,
+                '/vcs/installations',
+                $serverHeaders,
+                ['includeAllProjects' => true],
+            );
+            $this->assertNotContains(
+                $sourceInstallationId,
+                array_column($unavailable['body']['installations'], '$id'),
+            );
+
+            $denied = $this->client->call(Client::METHOD_POST, '/vcs/installations', $serverHeaders, [
+                'sourceInstallationId' => $sourceInstallationId,
+            ]);
+            $this->assertSame(404, $denied['headers']['status-code']);
+
+            $headers = array_merge($this->getHeaders(), [
+                'content-type' => 'application/json',
+                'x-appwrite-project' => $projectId,
+            ]);
+            $available = $this->client->call(
+                Client::METHOD_GET,
+                '/vcs/installations',
+                $headers,
+                ['includeAllProjects' => true],
+            );
+
+            $this->assertSame(200, $available['headers']['status-code']);
+            $this->assertContains(
+                $sourceInstallationId,
+                array_column($available['body']['installations'], '$id'),
+            );
+
+            $linked = $this->client->call(Client::METHOD_POST, '/vcs/installations', $headers, [
+                'sourceInstallationId' => $sourceInstallationId,
+            ]);
+
+            $this->assertSame(201, $linked['headers']['status-code']);
+            $this->assertNotSame($sourceInstallationId, $linked['body']['$id']);
+            $this->assertSame(
+                $sourceInstallation['body']['providerInstallationId'],
+                $linked['body']['providerInstallationId'],
+            );
+
+            $replayed = $this->client->call(Client::METHOD_POST, '/vcs/installations', $headers, [
+                'sourceInstallationId' => $sourceInstallationId,
+            ]);
+            $this->assertSame(200, $replayed['headers']['status-code']);
+            $this->assertSame($linked['body']['$id'], $replayed['body']['$id']);
+        } finally {
+            $this->client->call(Client::METHOD_DELETE, '/projects/' . $projectId, $consoleHeaders);
+            $this->client->call(Client::METHOD_DELETE, '/teams/' . $team['body']['$id'], $consoleHeaders);
+        }
+    }
+
     public function testCreateRepository(): void
     {
         $installationId = $this->setupInstallation();
