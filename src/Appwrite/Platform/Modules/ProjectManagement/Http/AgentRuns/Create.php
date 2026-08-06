@@ -44,7 +44,7 @@ class Create extends Action
             ->label('resourceType', RESOURCE_TYPE_AGENT_RUNS)
             ->label('sdk', Sdk::method('createAgentRun', Response::MODEL_AGENT_RUN, Response::STATUS_CODE_CREATED))
             ->label('event', 'agentRuns.[runId].create')
-            ->param('runId', 'unique()', new CustomId(), 'Run ID or `unique()`.')
+            ->param('runId', 'unique()', new CustomId(), 'Run ID or `unique()`.', true)
             ->param('taskId', '', new UID(), 'Task ID.')
             ->param('agentType', '', new WhiteList(['project_agent', 'development_agent']), 'Agent type.')
             ->param('workspaceId', '', new Text(255), 'Workspace ID.', true)

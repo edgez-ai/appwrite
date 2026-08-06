@@ -45,7 +45,7 @@ class Create extends Action
                 Sdk::method('createStickerGroup', Response::MODEL_STICKER_GROUP, Response::STATUS_CODE_CREATED),
             )
             ->label('event', 'stickerGroups.[groupId].create')
-            ->param('groupId', 'unique()', new CustomId(), 'Group ID or `unique()`.')
+            ->param('groupId', 'unique()', new CustomId(), 'Group ID or `unique()`.', true)
             ->param('title', '', new Text(256), 'Group title.')
             ->param('description', '', new Text(65535), 'Group description.', true)
             ->param('taskId', null, new Nullable(new UID()), 'Related task ID.', true)

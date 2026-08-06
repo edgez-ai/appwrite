@@ -25,6 +25,20 @@ final class ProjectManagementCustomServerTest extends Scope
         ];
     }
 
+    public function testCreateTaskGeneratesIdWhenOmitted(): void
+    {
+        $task = $this->client->call(
+            Client::METHOD_POST,
+            '/tasks',
+            $this->getProjectManagementHeaders(),
+            ['title' => 'Task with generated ID'],
+        );
+
+        $this->assertSame(201, $task['headers']['status-code']);
+        $this->assertNotEmpty($task['body']['$id']);
+        $this->assertSame('Task with generated ID', $task['body']['title']);
+    }
+
     public function testAgentCanDiscoverAndReplayCreateSafely(): void
     {
         $headers = $this->getProjectManagementHeaders();

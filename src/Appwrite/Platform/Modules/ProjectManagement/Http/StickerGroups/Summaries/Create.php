@@ -51,7 +51,7 @@ class Create extends Action
             )
             ->label('event', 'stickerGroups.[groupId].summaries.[summaryId].create')
             ->param('groupId', '', new UID(), 'Sticker Group ID.')
-            ->param('summaryId', 'unique()', new CustomId(), 'Summary ID or `unique()`. Reuse it when retrying.')
+            ->param('summaryId', 'unique()', new CustomId(), 'Summary ID or `unique()`. Reuse it when retrying.', true)
             ->param('content', '', new Text(65535), 'Rendered summary.')
             ->param('structuredContent', [], new JSON(), 'Structured summary.', true)
             ->param(

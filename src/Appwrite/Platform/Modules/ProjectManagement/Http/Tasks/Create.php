@@ -46,7 +46,7 @@ class Create extends Action
             ->label('resourceType', RESOURCE_TYPE_PROJECT_TASKS)
             ->label('sdk', Sdk::method('createTask', Response::MODEL_PROJECT_TASK, Response::STATUS_CODE_CREATED))
             ->label('event', 'tasks.[taskId].create')
-            ->param('taskId', 'unique()', new CustomId(), 'Task ID or `unique()`.')
+            ->param('taskId', 'unique()', new CustomId(), 'Task ID or `unique()`.', true)
             ->param('title', '', new Text(256), 'Task title.')
             ->param('description', '', new Text(65535), 'Task description.', true)
             ->param('parentTaskId', null, new Nullable(new UID()), 'Parent task ID.', true)

@@ -42,7 +42,7 @@ class Create extends Action
             ->label('resourceType', RESOURCE_TYPE_EVIDENCE)
             ->label('sdk', Sdk::method('createEvidence', Response::MODEL_EVIDENCE, Response::STATUS_CODE_CREATED))
             ->label('event', 'evidence.[evidenceId].create')
-            ->param('evidenceId', 'unique()', new CustomId(), 'Evidence ID or `unique()`.')
+            ->param('evidenceId', 'unique()', new CustomId(), 'Evidence ID or `unique()`.', true)
             ->param('taskId', '', new UID(), 'Task ID.')
             ->param('agentRunId', '', new UID(), 'Agent Run ID.')
             ->param(

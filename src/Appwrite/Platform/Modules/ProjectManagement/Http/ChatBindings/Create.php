@@ -43,7 +43,7 @@ class Create extends Action
                 Sdk::method('createChatBinding', Response::MODEL_CHAT_BINDING, Response::STATUS_CODE_CREATED),
             )
             ->label('event', 'chatBindings.[bindingId].create')
-            ->param('bindingId', 'unique()', new CustomId(), 'Binding ID or `unique()`.')
+            ->param('bindingId', 'unique()', new CustomId(), 'Binding ID or `unique()`.', true)
             ->param('provider', '', new WhiteList(['slack', 'teams', 'wecom']), 'Chat provider.')
             ->param('externalTenantId', '', new Text(255), 'Provider tenant/workspace ID.')
             ->param('conversationId', '', new Text(255), 'Channel or conversation ID.')

@@ -44,7 +44,7 @@ class Create extends Action
             ->label('resourceType', RESOURCE_TYPE_STICKERS)
             ->label('sdk', Sdk::method('createSticker', Response::MODEL_STICKER, Response::STATUS_CODE_CREATED))
             ->label('event', 'stickers.[stickerId].create')
-            ->param('stickerId', 'unique()', new CustomId(), 'Sticker ID or `unique()`.')
+            ->param('stickerId', 'unique()', new CustomId(), 'Sticker ID or `unique()`.', true)
             ->param(
                 'type',
                 'note',
